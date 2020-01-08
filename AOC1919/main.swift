@@ -207,3 +207,16 @@ let affectedPoints = (0..<50).flatMap{ x in (0..<50).map{ y in (x:x, y:y) } }
 }
 
 print(affectedPoints.count)
+
+let s = Set(affectedPoints)
+
+for x in 0..<50 {
+    for y in 0..<50 {
+        if s.contains(Point(x: x, y: y)) {
+            print("#", terminator:"")
+        } else {
+            print(".", terminator:"")
+        }
+    }
+    print()
+}
