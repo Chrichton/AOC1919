@@ -252,5 +252,3 @@ let points = (2000...5000).flatMap{ y in (minX(y)...maxX(y)).map{ x in (x:x, y:y
             }
     }
 }
-
-print(points.count)
