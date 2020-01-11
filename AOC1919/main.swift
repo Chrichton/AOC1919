@@ -198,25 +198,59 @@ struct Point: Hashable {
     let y: Int
 }
 
-let affectedPoints = (0..<50).flatMap{ x in (0..<50).map{ y in (x:x, y:y) } }
-    .reduce(into: [Point]()) { accu, current in
+//let affectedPoints = (0..<50).flatMap{ x in (0..<50).map{ y in (x:x, y:y) } }
+//    .reduce(into: [Point]()) { accu, current in
+//        var program = Program(memory: memoryString)
+//        if program.run(input: [current.x, current.y]) == [1] {
+//            accu.append(Point(x: current.x, y: current.y))
+//    }
+//}
+//
+//print(affectedPoints.count)
+//
+//let s = Set(affectedPoints)
+//
+//for x in 0..<50 {
+//    for y in 0..<50 {
+//        if s.contains(Point(x: x, y: y)) {
+//            print("#", terminator:"")
+//        } else {
+//            print(".", terminator:"")
+//        }
+//    }
+//    print()
+//}
+
+func minX(_ y: Int) -> Int {
+    return Int((Double(y) * 0.75).rounded(.down))
+}
+
+func maxX(_ y: Int) -> Int {
+    return Int((Double(y) * 0.9).rounded(.up))
+}
+
+func checkPoint(_ point: (x: Int, y: Int), accu: Set<Point>) -> Bool {
+    return accu.contains(Point(x: point.x - 100, y: point.y - 100))
+        && accu.contains(Point(x: point.x - 100, y: point.y))
+        && accu.contains(Point(x: point.x, y: point.y - 100))
+}
+
+let start = DispatchTime.now()
+
+let points = (2000...5000).flatMap{ y in (minX(y)...maxX(y)).map{ x in (x:x, y:y) } }
+    .reduce(into: Set<Point>()) { accu, current in
         var program = Program(memory: memoryString)
         if program.run(input: [current.x, current.y]) == [1] {
-            accu.append(Point(x: current.x, y: current.y))
+            accu.insert(Point(x: current.x, y: current.y))
+            
+            if checkPoint(current, accu: accu) {
+                let end = DispatchTime.now()
+                let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+                let seconds = Double(nanoTime) / 1_000_000_000
+                print(current.x * 10_000 + current.y, "seconds: ", seconds)
+                exit(0)
+            }
     }
 }
 
-print(affectedPoints.count)
-
-let s = Set(affectedPoints)
-
-for x in 0..<50 {
-    for y in 0..<50 {
-        if s.contains(Point(x: x, y: y)) {
-            print("#", terminator:"")
-        } else {
-            print(".", terminator:"")
-        }
-    }
-    print()
-}
+print(points.count)
