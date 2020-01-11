@@ -230,9 +230,9 @@ func maxX(_ y: Int) -> Int {
 }
 
 func checkPoint(_ point: (x: Int, y: Int), accu: Set<Point>) -> Bool {
-    return accu.contains(Point(x: point.x - 100, y: point.y - 100))
-        && accu.contains(Point(x: point.x - 100, y: point.y))
-        && accu.contains(Point(x: point.x, y: point.y - 100))
+    return accu.contains(Point(x: point.x - 99, y: point.y - 99))
+        && accu.contains(Point(x: point.x - 99, y: point.y))
+        && accu.contains(Point(x: point.x, y: point.y - 99))
 }
 
 let start = DispatchTime.now()
@@ -247,7 +247,7 @@ let points = (2000...5000).flatMap{ y in (minX(y)...maxX(y)).map{ x in (x:x, y:y
                 let end = DispatchTime.now()
                 let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
                 let seconds = Double(nanoTime) / 1_000_000_000
-                print(current.x * 10_000 + current.y, "seconds: ", seconds)
+                print((current.x - 99) * 10_000 + current.y - 99, "seconds: ", seconds)
                 exit(0)
             }
     }
